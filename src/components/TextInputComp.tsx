@@ -7,6 +7,7 @@ import {
     View,
     TextStyle,
     TouchableOpacity,
+    Platform,
 } from 'react-native';
 import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
@@ -24,6 +25,7 @@ interface TextInputCompProps extends TextInputProps {
     placeholder?: string;
     rightIcon?: React.ReactNode;
     onRightIconPress?: () => void;
+    leftIcon?: React.ReactNode;
 }
 
 const TextInputComp: React.FC<TextInputCompProps> = ({
@@ -34,11 +36,11 @@ const TextInputComp: React.FC<TextInputCompProps> = ({
     placeholder,
     rightIcon,
     onRightIconPress,
+    leftIcon,
     ...props
 }) => {
-
     const { theme } = useTheme();
-    const isRTL = useIsRTL()
+    const isRTL = useIsRTL();
     const styles = useRTLStyles(isRTL, theme);
     const colors = Colors[theme];
 
@@ -50,14 +52,21 @@ const TextInputComp: React.FC<TextInputCompProps> = ({
                 containerStyle,
             ]}
         >
+            {leftIcon && (
+                <View style={styles.leftIconContainer}>
+                    {leftIcon}
+                </View>
+            )}
             <TextInput
                 style={[
                     styles.input,
                     error && touched && styles.errorInput,
-                    inputStyle
+                    leftIcon && styles.inputWithLeftIcon,
+                    rightIcon && styles.inputWithRightIcon,
+                    inputStyle,
                 ]}
                 placeholderTextColor={colors.inputPlaceholder}
-                placeholder={t(placeholder)}
+                placeholder={placeholder ? t(placeholder) : ''}
                 textAlign={isRTL ? 'right' : 'left'}
                 {...props}
             />
@@ -65,6 +74,9 @@ const TextInputComp: React.FC<TextInputCompProps> = ({
                 <TouchableOpacity
                     onPress={onRightIconPress}
                     disabled={!onRightIconPress}
+                    style={styles.rightIconContainer}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                     {rightIcon}
                 </TouchableOpacity>
@@ -78,25 +90,53 @@ const useRTLStyles = (isRTL: boolean, theme?: ThemeType) => {
 
     return StyleSheet.create({
         container: {
-            backgroundColor: colors.inputBackground,
-            borderWidth: 1,
+            backgroundColor: '#FFFFFF',
+            borderWidth: 2,
             borderColor: colors.inputBorder,
-            borderRadius: moderateScale(7),
-            padding: moderateScale(14),
+            borderRadius: moderateScale(20),
             flexDirection: isRTL ? 'row-reverse' : 'row',
             alignItems: 'center',
+            minHeight: moderateScale(48),
+            paddingHorizontal: moderateScale(14),
         },
         input: {
             flex: 1,
             fontFamily: fontFamily.regular,
             fontSize: moderateScale(14),
             color: colors.text,
-            padding: 0,
+            paddingVertical: moderateScale(14),
+            paddingHorizontal: 0,
             margin: 0,
+            ...Platform.select({
+                android: {
+                    paddingVertical: moderateScale(12),
+                },
+            }),
         },
-
+        inputWithLeftIcon: {
+            paddingLeft: isRTL ? 0 : moderateScale(8),
+            paddingRight: isRTL ? moderateScale(8) : 0,
+        },
+        inputWithRightIcon: {
+            paddingRight: isRTL ? 0 : moderateScale(8),
+            paddingLeft: isRTL ? moderateScale(8) : 0,
+        },
+        leftIconContainer: {
+            marginRight: isRTL ? 0 : moderateScale(8),
+            marginLeft: isRTL ? moderateScale(8) : 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        rightIconContainer: {
+            marginLeft: isRTL ? 0 : moderateScale(8),
+            marginRight: isRTL ? moderateScale(8) : 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: moderateScale(4),
+        },
         errorContainer: {
             borderColor: commonColors.error,
+            borderWidth: 1,
         },
         errorInput: {
             color: commonColors.error,

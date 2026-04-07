@@ -203,7 +203,7 @@ const Home = () => {
                             <TextComp isDynamic text={getCurrentDate()} style={styles.headerDate} />
                             <TextComp isDynamic text="Greetings, Seeker" style={styles.headerGreeting} />
                         </View>
-                        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                             <ImageComp
                                 source={ProfileImage}
                                 width={moderateScale(40)}

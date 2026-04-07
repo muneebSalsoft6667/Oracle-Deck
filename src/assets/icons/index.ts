@@ -11,7 +11,15 @@ import SettingsIcon from '@/assets/images/settings.svg';
 import BackArrowIcon from '@/assets/images/back-arrow.svg';
 import ShuffleIcon from '@/assets/images/draw.svg';
 import GuidebookIcon from '@/assets/images/guide.svg';
-
+import ArrowRightIcon from '@/assets/images/arrow.svg';
+import EmailIcon from '@/assets/images/email.svg';
+import TickIcon from '@/assets/images/tick.json';
+import BellIcon from '@/assets/images/bell.svg';
+import CardIcon from '@/assets/images/card.svg';
+import CheckmarkIcon from '@/assets/images/checkmark.svg';
+import bookIcon from '@/assets/images/book.svg';
+import binIcon from '@/assets/images/bin.svg';
+import logoutIcon from '@/assets/images/logout.svg';
 export {
     ProfileIcon,
     ProfileInactiveIcon,
@@ -26,5 +34,14 @@ export {
     SettingsIcon,
     ShuffleIcon,
     GuidebookIcon,
+    ArrowRightIcon,
+    EmailIcon,
+    TickIcon,
+    BellIcon,
+    CardIcon,
+    CheckmarkIcon,
+    bookIcon,
+    binIcon,
+    logoutIcon,
 };
 

@@ -19,7 +19,7 @@ const WrapperContainer: React.FC<WrapperContainerProps> = ({
 
     return (
         <SafeAreaView
-            style={[styles.container, style, { backgroundColor: colors.background }]}
+            style={[styles.container, style, { backgroundColor: '#f9f7f2' }]}
             {...safeAreaProps}
         >
             <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} />

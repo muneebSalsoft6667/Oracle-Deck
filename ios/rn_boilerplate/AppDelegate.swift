@@ -2,7 +2,6 @@ import UIKit
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
-import RNBootSplash
 import Firebase
 
 @main
@@ -52,6 +51,5 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
     override func customize(_ rootView: RCTRootView!) {
     super.customize(rootView)
-    RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
   }
 }

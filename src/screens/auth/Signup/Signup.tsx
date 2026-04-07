@@ -1,137 +1,190 @@
-import { BackArrowIcon, EyeIcon } from '@/assets/icons';
-import ButtonComp from '@/components/ButtonComp';
-import TextComp from '@/components/TextComp';
-import TextInputComp from '@/components/TextInputComp';
-import WrapperContainer from '@/components/WrapperContainer';
-import { AuthStackParamList } from '@/navigation/types';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
     TouchableOpacity,
-    View
+    View,
 } from 'react-native';
-import useRTLStyles from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import ButtonComp from '@/components/ButtonComp';
+import TextComp from '@/components/TextComp';
+import TextInputComp from '@/components/TextInputComp';
+import WrapperContainer from '@/components/WrapperContainer';
+import { AuthStackParamList } from '@/navigation/types';
 import useIsRTL from '@/hooks/useIsRTL';
 import { useTheme } from '@/context/ThemeContext';
-import HeaderComp from '@/components/HeaderComp';
+import useRTLStyles from './styles';
+import { EyeIcon } from '@/assets/icons';
 
-type SignupScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
-
-// create a component
 const Signup = () => {
     const isRTL = useIsRTL();
     const { theme } = useTheme();
     const styles = useRTLStyles(isRTL, theme);
 
-    const navigation = useNavigation<SignupScreenNavigationProp>();
-    const [formData, setFormData] = useState({
-        fullName: '',
-        email: '',
-        phone: '',
-        password: '',
-        confirmPassword: '',
-    });
+    const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+    const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({});
 
-    const handleChange = (name: string, value: string) => {
-        setFormData(prev => ({ ...prev, [name]: value }));
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     };
 
-    const handleSubmit = () => {
-        console.log('Form submitted:', formData);
+    const validateForm = (): boolean => {
+        const newErrors: { email?: string; password?: string } = {};
+
+        if (!email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!validateEmail(email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        if (!password.trim()) {
+            newErrors.password = 'Password is required';
+        } else if (password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
+    const handleCreateAccount = () => {
+        if (!validateForm()) {
+            setTouched({ email: true, password: true });
+            return;
+        }
 
+        // TODO: Implement actual signup logic
+        // After successful signup, navigate back to Login
+        navigation.navigate('Login');
+    };
+
+    const handleBlur = (field: 'email' | 'password') => {
+        setTouched(prev => ({ ...prev, [field]: true }));
+        if (field === 'email' && email) {
+            if (!validateEmail(email)) {
+                setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+            } else {
+                setErrors(prev => ({ ...prev, email: undefined }));
+            }
+        }
+        if (field === 'password' && password) {
+            if (password.length < 6) {
+                setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));
+            } else {
+                setErrors(prev => ({ ...prev, password: undefined }));
+            }
+        }
+    };
+
+    const handleSignIn = () => {
+        navigation.navigate('Login');
+    };
 
     return (
-        <WrapperContainer>
+        <WrapperContainer style={styles.container}>
             <KeyboardAvoidingView
-                style={styles.container}
+                style={styles.keyboardView}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             >
-                <HeaderComp customStyle={styles.header} />
                 <ScrollView
-                    style={styles.scrollView}
+                    contentContainerStyle={styles.scrollContent}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
                 >
+                    <View style={styles.content}>
+                        {/* Title Section */}
+                        <View style={styles.titleSection}>
+                            <TextComp isDynamic text="Begin Journey" style={styles.title} />
+                            <TextComp
+                                isDynamic
+                                text="Create an account to save your readings."
+                                style={styles.subtitle}
+                            />
+                        </View>
 
-                    <View style={styles.headerContainer}>
-                        <TextComp text="REGISTER" style={styles.headerTitle} />
-                        <View style={styles.loginContainer}>
-                            <TextComp text="ALREADY_HAVE_ACCOUNT" style={styles.loginText} />
-                            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                                <TextComp text="LOG_IN" style={styles.loginLink} />
+                        {/* Form Section */}
+                        <View style={styles.formSection}>
+                            <View style={styles.inputGroup}>
+                                <TextComp isDynamic text="Email Address" style={styles.inputLabel} />
+                                <TextInputComp
+                                    value={email}
+                                    onChangeText={(text) => {
+                                        setEmail(text);
+                                        if (touched.email) {
+                                            if (!text.trim()) {
+                                                setErrors(prev => ({ ...prev, email: 'Email is required' }));
+                                            } else if (!validateEmail(text)) {
+                                                setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+                                            } else {
+                                                setErrors(prev => ({ ...prev, email: undefined }));
+                                            }
+                                        }
+                                    }}
+                                    onBlur={() => handleBlur('email')}
+                                    placeholder=""
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    error={!!errors.email}
+                                    touched={touched.email}
+                                />
+                                {errors.email && touched.email && (
+                                    <TextComp isDynamic text={errors.email} style={styles.errorText} />
+                                )}
+                            </View>
+
+                            <View style={styles.inputGroup}>
+                                <TextComp isDynamic text="Password" style={styles.inputLabel} />
+                                <TextInputComp
+                                    value={password}
+                                    onChangeText={(text) => {
+                                        setPassword(text);
+                                        if (touched.password) {
+                                            if (!text.trim()) {
+                                                setErrors(prev => ({ ...prev, password: 'Password is required' }));
+                                            } else if (text.length < 6) {
+                                                setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));
+                                            } else {
+                                                setErrors(prev => ({ ...prev, password: undefined }));
+                                            }
+                                        }
+                                    }}
+                                    onBlur={() => handleBlur('password')}
+                                    placeholder=""
+                                    secureTextEntry={!showPassword}
+                                    rightIcon={<EyeIcon width={20} height={20} />}
+                                    onRightIconPress={() => setShowPassword(!showPassword)}
+                                    error={!!errors.password}
+                                    touched={touched.password}
+                                />
+                                {errors.password && touched.password && (
+                                    <TextComp isDynamic text={errors.password} style={styles.errorText} />
+                                )}
+                            </View>
+                        </View>
+
+                        {/* Button Section */}
+                        <View style={styles.buttonSection}>
+                            <ButtonComp
+                                title="CREATE ACCOUNT"
+                                onPress={handleCreateAccount}
+                         
+                            />
+                        </View>
+
+                        {/* Sign In Link */}
+                        <View style={styles.signInContainer}>
+                            <TextComp isDynamic text="Already have an account? " style={styles.signInText} />
+                            <TouchableOpacity onPress={handleSignIn}>
+                                <TextComp isDynamic text="Sign In" style={styles.signInLink} />
                             </TouchableOpacity>
                         </View>
-                    </View>
-
-                    <View style={styles.formContainer}>
-                        <View style={styles.inputGroup}>
-                            <TextComp text="FULL_NAME" style={styles.label} />
-                            <TextInputComp
-                                placeholder="YOUR_NAME"
-                                value={formData.fullName}
-                                onChangeText={(text) => handleChange('fullName', text)}
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <TextComp text="EMAIL_ADDRESS" style={styles.label} />
-                            <TextInputComp
-                                placeholder="YOUR_EMAIL"
-                                value={formData.email}
-                                onChangeText={(text) => handleChange('email', text)}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <TextComp text="PHONE_NUMBER" style={styles.label} />
-                            <TextInputComp
-                                placeholder="YOUR_PHONE"
-                                value={formData.phone}
-                                onChangeText={(text) => handleChange('phone', text)}
-                                keyboardType="phone-pad"
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <TextComp text="PASSWORD" style={styles.label} />
-                            <TextInputComp
-                                placeholder="WRITE_HERE"
-                                value={formData.password}
-                                onChangeText={(text) => handleChange('password', text)}
-                                secureTextEntry={!showPassword}
-                                rightIcon={<EyeIcon />}
-                                onRightIconPress={() => setShowPassword(!showPassword)}
-
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <TextComp text="CONFIRM_PASSWORD" style={styles.label} />
-                            <TextInputComp
-                                placeholder="WRITE_HERE"
-                                value={formData.confirmPassword}
-                                onChangeText={(text) => handleChange('confirmPassword', text)}
-                                secureTextEntry={!showConfirmPassword}
-                                rightIcon={<EyeIcon />}
-                                onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                            />
-                        </View>
-
-                        <ButtonComp
-                            title="NEXT"
-                            onPress={handleSubmit}
-                            style={styles.submitButton}
-                        />
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>

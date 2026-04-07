@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BackArrowIcon, SettingsIcon, SearchIcon } from '@/assets/icons';
 import TextComp from '@/components/TextComp';
 import ModalComp from './ModalComp';
+import LogoutModal from './LogoutModal';
 import ButtonComp from './ButtonComp';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
@@ -79,6 +80,7 @@ const HeaderComp: React.FC<HeaderCompProps> = ({
     const isRTL = useIsRTL();
     const styles = useRTLStyles(isRTL, theme);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [internalSearchValue, setInternalSearchValue] = useState('');
 
@@ -146,11 +148,22 @@ const HeaderComp: React.FC<HeaderCompProps> = ({
         setIsModalVisible(false);
     };
 
-    const onLogout = () => {
+    const handleLogoutClick = () => {
         closeModal();
         setTimeout(() => {
+            setIsLogoutModalVisible(true);
+        }, 300);
+    };
+
+    const handleLogoutConfirm = () => {
+        setIsLogoutModalVisible(false);
+        setTimeout(() => {
             clearDataAction();
-        }, 400);
+        }, 200);
+    };
+
+    const handleLogoutCancel = () => {
+        setIsLogoutModalVisible(false);
     };
 
     const renderRightAction = () => {
@@ -319,10 +332,17 @@ const HeaderComp: React.FC<HeaderCompProps> = ({
                         </View>
 
                         {/* Logout Button */}
-                        {isFirstTime && <ButtonComp title="LOGOUT" onPress={onLogout} />}
+                        {isFirstTime && <ButtonComp title="LOGOUT" onPress={handleLogoutClick} />}
                     </View>
                 </ModalComp>
             )}
+
+            {/* Logout Confirmation Modal */}
+            <LogoutModal
+                isVisible={isLogoutModalVisible}
+                onClose={handleLogoutCancel}
+                onConfirm={handleLogoutConfirm}
+            />
         </>
     );
 };

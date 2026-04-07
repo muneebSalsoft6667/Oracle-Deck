@@ -1,14 +1,17 @@
-import { HomeIcon, HomeInactiveIcon, SearchIcon, SearchInactiveIcon, HistoryIcon, HistoryInactiveIcon, ProfileIcon, ProfileInactiveIcon } from '@/assets/icons';
-import { Guidebook, Home, Profile, ShuffleandDraw } from '@/screens';
+import { HistoryIcon, HistoryInactiveIcon, HomeIcon, HomeInactiveIcon, ProfileIcon, ProfileInactiveIcon, SearchIcon, SearchInactiveIcon } from '@/assets/icons';
 import { useTheme } from '@/context/ThemeContext';
+import { CreateJournal, EditProfile, Guidebook, GuidebookDetail, Home, Notification, Profile, Settings, ShuffleandDraw, ShuffleTheDeck, Subscription } from '@/screens';
+import History from '@/screens/main/History/History';
+import JournalHistoryDetails from '@/screens/main/History/JournalHistoryDetails';
+import Search from '@/screens/main/Search/Search';
+import CardPosition from '@/screens/main/ShuffleTheDeck/CardPosition';
+import FullInterpretation from '@/screens/main/ShuffleTheDeck/FullInterpretation';
 import { Colors } from '@/styles/colors';
 import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import History from '@/screens/main/History/History';
-import Search from '@/screens/main/Search/Search';
 import MyTabBar from './MyTabBar';
 import { MainStackParamList, MainTabParamList } from './types';
 
@@ -82,8 +85,66 @@ export const MainStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} id={undefined}>
       <Stack.Screen name="MainTabs" component={MainTabs} />
-      <Stack.Screen name="ShuffleandDraw" component={ShuffleandDraw} />
-      <Stack.Screen name="Guidebook" component={Guidebook} />
+      <Stack.Screen 
+        name="ShuffleandDraw" 
+        component={ShuffleandDraw}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="ShuffleTheDeck" 
+        component={ShuffleTheDeck}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="CardPosition" 
+        component={CardPosition}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="FullInterpretation" 
+        component={FullInterpretation}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="Guidebook" 
+        component={Guidebook}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="GuidebookDetail" 
+        component={GuidebookDetail}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen 
+        name="JournalHistoryDetails" 
+        component={JournalHistoryDetails}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="Notification" component={Notification} />
+      <Stack.Screen name="Subscription" component={Subscription} />
+      <Stack.Screen 
+        name="CreateJournal" 
+        component={CreateJournal}
+        options={{
+          animation: 'slide_from_bottom',
+        }}
+      />
     </Stack.Navigator>
   );
 };

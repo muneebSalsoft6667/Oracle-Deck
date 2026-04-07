@@ -7,68 +7,108 @@ import { moderateScale } from '@/styles/scaling';
 const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {
     const colors = Colors[theme ?? 'light'];
 
-    return useMemo(() => StyleSheet.create({
-        container: {
-            flex: 1,
-            paddingHorizontal: moderateScale(16),
-        },
-        content: {
-            flex: 1,
-            marginTop: moderateScale(24),
-            justifyContent: 'space-between',
-        },
-        titleSection: {
-            marginBottom: moderateScale(32),
-        },
-        title: {
-            fontSize: moderateScale(22),
-            marginBottom: moderateScale(12),
-            textTransform: 'uppercase',
-            fontFamily: fontFamily.bold,
-        },
-        signUpPrompt: {
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            gap: moderateScale(6),
-        },
-        greyText: {
-            fontSize: moderateScale(12),
-            color: colors.inputPlaceholder,
-            fontFamily: fontFamily.regular,
-        },
-        signUpLink: {
-            fontSize: moderateScale(12),
-            color: commonColors.secondary,
-            fontFamily: fontFamily.medium,
-            textDecorationLine: 'underline',
-            letterSpacing: 0.5,
-
-        },
-        formSection: {
-            marginBottom: moderateScale(24),
-        },
-        inputLabel: {
-            fontSize: moderateScale(16),
-            fontFamily: fontFamily.medium,
-            marginBottom: moderateScale(10),
-        },
-        buttonSection: {
-            marginBottom: moderateScale(24),
-        },
-        nextButton: {
-            height: moderateScale(48),
-            backgroundColor: commonColors.primary,
-        },
-        termsText: {
-            fontSize: moderateScale(12),
-            color: colors.inputPlaceholder,
-            fontFamily: fontFamily.regular,
-            textAlign: 'center',
-        },
-        header: {
-            paddingHorizontal: 0
-        }
-    }), [isRTL, theme, colors]); // Dependencies array includes all variables used in the styles
+    return useMemo(
+        () =>
+            StyleSheet.create({
+                container: {
+                    flex: 1,
+                    backgroundColor: '#F3F2EF',
+                },
+                keyboardView: {
+                    flex: 1,
+                },
+                scrollContent: {
+                    flexGrow: 1,
+                },
+                content: {
+                    flex: 1,
+                    paddingHorizontal: moderateScale(24),
+                    paddingTop: moderateScale(40),
+                    paddingBottom: moderateScale(30),
+                },
+                titleSection: {
+                    marginBottom: moderateScale(40),
+                    alignItems: 'flex-start',
+                },
+                title: {
+                    fontSize: moderateScale(32),
+                    fontFamily: fontFamily.times,
+                    color: commonColors.black,
+                    marginBottom: moderateScale(8),
+                    textAlign: 'left',
+                },
+                subtitle: {
+                    fontSize: moderateScale(16),
+                    fontFamily: fontFamily.regular,
+                    color: commonColors.black,
+                    textAlign: 'left',
+                },
+                formSection: {
+                    marginBottom: moderateScale(32),
+                },
+                inputGroup: {
+                    marginBottom: moderateScale(20),
+                },
+                inputLabel: {
+                    fontSize: moderateScale(14),
+                    fontFamily: fontFamily.medium,
+                    color: commonColors.black,
+                    marginBottom: moderateScale(8),
+                },
+                errorText: {
+                    fontSize: moderateScale(12),
+                    fontFamily: fontFamily.regular,
+                    color: commonColors.error,
+                    marginTop: moderateScale(4),
+                },
+                forgotPasswordContainer: {
+                    alignSelf: isRTL ? 'flex-start' : 'flex-end',
+                    marginTop: moderateScale(4),
+                },
+                forgotPasswordText: {
+                    fontSize: moderateScale(14),
+                    fontFamily: fontFamily.regular,
+                    color:commonColors.info,
+                    textDecorationLine: 'underline',
+                },
+                buttonSection: {
+                    marginBottom: moderateScale(24),
+                },
+                signInButton: {
+                    backgroundColor: '#4E3F86',
+                    borderRadius: moderateScale(12),
+                    height: moderateScale(52),
+                    shadowColor: '#000000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 4,
+                },
+                signInButtonText: {
+                    color: commonColors.white,
+                    fontSize: moderateScale(16),
+                    fontFamily: fontFamily.semiBold,
+                    textTransform: 'uppercase',
+                },
+                signUpContainer: {
+                    flexDirection: isRTL ? 'row-reverse' : 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                },
+                signUpText: {
+                    fontSize: moderateScale(14),
+                    fontFamily: fontFamily.regular,
+                    color: commonColors.black,
+                },
+                signUpLink: {
+                    fontSize: moderateScale(14),
+                    fontFamily: fontFamily.regular,
+                    color: '#4E3F86',
+                    textDecorationLine: 'underline',
+                },
+            }),
+        [isRTL, theme, colors]
+    );
 };
 
 export default useRTLStyles;

@@ -15,23 +15,22 @@ const useRTLStyles = (isRTL: boolean) => {
         },
         listContent: {
             paddingHorizontal: moderateScale(16),
-            paddingTop: moderateScale(8),
-            // paddingBottom: moderateScale(20),
+            paddingTop: moderateScale(20),
+            marginTop:20,
         },
         dateHeader: {
             fontSize: moderateScale(14),
             fontFamily: fontFamily.bold,
             color: colors.textSecondary,
             letterSpacing: 2.5,
-            // marginBottom: moderateScale(10),
             textAlign: isRTL ? 'right' : 'left',
         },
         itemCard: {
             backgroundColor: commonColors.white,
             borderRadius: moderateScale(20),
-            // minHeight: moderateScale(112),
             paddingHorizontal: moderateScale(16),
-            // paddingVertical: moderateScale(16),
+            paddingVertical: moderateScale(14),
+            minHeight: moderateScale(108),
             flexDirection: isRTL ? 'row-reverse' : 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -46,15 +45,14 @@ const useRTLStyles = (isRTL: boolean) => {
             flexDirection: isRTL ? 'row-reverse' : 'row',
             alignItems: 'center',
             flex: 1,
+            minHeight: moderateScale(76),
         },
         imageStackContainer: {
-            width: moderateScale(84),
+            width: moderateScale(96),
             height: moderateScale(76),
             position: 'relative',
-            backgroundColor: 'red',
             borderRadius: moderateScale(12),
-            overflow: 'hidden',
-          
+            justifyContent: 'center',
         },
         imageStackItem: {
             position: 'absolute',
@@ -89,7 +87,7 @@ const useRTLStyles = (isRTL: boolean) => {
             opacity: 0.45,
         },
         sectionSpacing: {
-            height: moderateScale(42),
+            height: moderateScale(14),
         },
         emptyContainer: {
             paddingTop: moderateScale(40),
@@ -100,6 +98,6 @@ const useRTLStyles = (isRTL: boolean) => {
             fontFamily: fontFamily.regular,
             color: colors.textSecondary,
         },
-    }), [isRTL, colors.textSecondary]);
+    }), [isRTL, colors.text, colors.textSecondary]);
 };
 export default useRTLStyles;

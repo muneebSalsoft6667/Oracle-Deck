@@ -85,6 +85,12 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core:1.17.0'
+        }
+    }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -116,6 +122,15 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+}
+
+// Exclude old Android Support libraries to avoid conflicts with AndroidX
+configurations.all {
+    exclude group: 'com.android.support', module: 'support-compat'
+    exclude group: 'com.android.support', module: 'support-annotations'
+    exclude group: 'com.android.support', module: 'support-v4'
+    exclude group: 'com.android.support', module: 'support-core-utils'
+    exclude group: 'com.android.support', module: 'support-fragment'
 }
 
 apply plugin: 'com.google.gms.google-services'

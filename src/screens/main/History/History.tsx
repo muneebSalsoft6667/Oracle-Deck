@@ -3,10 +3,13 @@ import HeaderComp from '@/components/HeaderComp';
 import TextComp from '@/components/TextComp';
 import WrapperContainer from '@/components/WrapperContainer';
 import { fall, fall02, fall03, fall04, fall05 } from '@/assets/images';
-import { BackArrowIcon } from '@/assets/icons';
+import { ArrowRightIcon } from '@/assets/icons';
 import useIsRTL from '@/hooks/useIsRTL';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, SectionList, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MainStackParamList } from '@/navigation/types';
 import useRTLStyles from './styles';
 
 interface HistoryItem {
@@ -26,6 +29,7 @@ const History = () => {
     const isRTL = useIsRTL();
     const [query, setQuery] = useState('');
     const styles = useRTLStyles(isRTL);
+    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
     const historyItems = useMemo<HistoryItem[]>(() => [
         {
@@ -87,9 +91,9 @@ const History = () => {
                 {maxImages.map((image, index) => (
                     <View
                         key={`${String(image)}-${index}`}
-                        style={[styles.imageStackItem, { left: index * 16, zIndex: maxImages.length - index }]}
+                        style={[styles.imageStackItem, { left: index * 14, zIndex: maxImages.length - index }]}
                     >
-                        <ImageComp source={image} width={50} height={74} borderRadius={12} />
+                        <ImageComp source={image} width={55} height={74} borderRadius={12} />
                     </View>
                 ))}
             </View>
@@ -97,8 +101,19 @@ const History = () => {
     };
 
     const renderItem = ({ item }: { item: HistoryItem }) => {
+        const handlePress = () => {
+            // Only navigate for Daily Reflection and Temporal Path
+            if (item.title === 'Daily Reflection' || item.title === 'Temporal Path') {
+                navigation.navigate('JournalHistoryDetails', { journalId: item.id });
+            }
+        };
+
         return (
-            <Pressable style={styles.itemCard} android_ripple={{ color: '#f3f0eb' }}>
+            <Pressable 
+                style={styles.itemCard} 
+                android_ripple={{ color: '#f3f0eb' }}
+                onPress={handlePress}
+            >
                 <View style={styles.itemLeftContent}>
                     {renderImageStack(item.images)}
                     <View style={styles.itemTextContent}>
@@ -107,7 +122,7 @@ const History = () => {
                     </View>
                 </View>
                 <View style={styles.arrowContainer}>
-                    <BackArrowIcon width={24} height={24} style={styles.arrowIcon} />
+                    <ArrowRightIcon width={24} height={24} />
                 </View>
             </Pressable>
         );

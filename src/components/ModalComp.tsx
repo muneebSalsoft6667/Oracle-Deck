@@ -16,6 +16,7 @@ interface ModalCompProps {
     backdropTransitionOutTiming?: number;
     animationInTiming?: number;
     animationOutTiming?: number;
+    centered?: boolean;
 }
 
 const ModalComp: React.FC<ModalCompProps> = ({
@@ -29,9 +30,10 @@ const ModalComp: React.FC<ModalCompProps> = ({
     backdropTransitionOutTiming = 300,
     animationInTiming = 300,
     animationOutTiming = 300,
+    centered = false,
 }) => {
     const { theme } = useTheme();
-    const styles = useStyles(theme);
+    const styles = useStyles(theme, centered);
 
     return (
         <Modal
@@ -45,18 +47,18 @@ const ModalComp: React.FC<ModalCompProps> = ({
             animationInTiming={animationInTiming}
             animationOutTiming={animationOutTiming}
             useNativeDriver
-            style={styles.modal}
+            style={centered ? styles.modalCentered : styles.modal}
             statusBarTranslucent
         >
             <View style={[styles.container, containerStyle]}>
-                <View style={styles.handle} />
+                {!centered && <View style={styles.handle} />}
                 {children}
             </View>
         </Modal>
     );
 };
 
-const useStyles = (theme: ThemeType) => {
+const useStyles = (theme: ThemeType, centered: boolean) => {
     const colors = Colors[theme];
 
     return StyleSheet.create({
@@ -64,10 +66,17 @@ const useStyles = (theme: ThemeType) => {
             margin: 0,
             justifyContent: 'flex-end',
         },
+        modalCentered: {
+            margin: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
         container: {
             backgroundColor: colors.background,
-            borderTopLeftRadius: moderateScale(24),
-            borderTopRightRadius: moderateScale(24),
+            borderTopLeftRadius: centered ? moderateScale(24) : moderateScale(24),
+            borderTopRightRadius: centered ? moderateScale(24) : moderateScale(24),
+            borderBottomLeftRadius: centered ? moderateScale(24) : 0,
+            borderBottomRightRadius: centered ? moderateScale(24) : 0,
             padding: moderateScale(20),
             paddingTop: moderateScale(12),
             minHeight: moderateScale(100),

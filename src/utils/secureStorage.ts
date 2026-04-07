@@ -5,6 +5,8 @@ export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',
   USER_DATA: 'user_data',
   IS_FIRST_TIME: 'is_first_time',
+  HAS_PERSONALIZED: 'has_personalized',
+  HAS_SEEN_ONBOARDING: 'has_seen_onboarding',
   LANGUAGE: 'language',
   THEME: 'theme',
   FCM_TOKEN: 'fcm_token',
